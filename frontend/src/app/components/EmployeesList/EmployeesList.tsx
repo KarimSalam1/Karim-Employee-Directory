@@ -166,7 +166,7 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
                 }}
                 className="filter-value-select"
               >
-                <option value="All">All Titles</option>
+                <option value="All">All</option>
                 {filterOptions[filterType].map((option) => (
                   <option key={option} value={option}>
                     {option}
