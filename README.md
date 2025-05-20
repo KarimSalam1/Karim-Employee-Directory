@@ -45,10 +45,10 @@ A full-stack employee directory application built with **Next.js** (frontend) an
 - ✏️ Edit employee
 - ❌ Delete employee
 - 📄 Pagination
-- 📱 Responsive design
+- 📱 Responsive UI design
 - 🌗 Light/Dark mode with animated toggle (Framer Motion)
 - 🎞️ Smooth page and layout transitions (Framer Motion)
-- 🌐 Live deployment on Vercel (frontend) and Render (backend)
+- 🌐 Live deployment with frontend on Vercel and backend on Render
 
 ---
 
@@ -68,21 +68,23 @@ cd backend
 npm install
 ```
 
-➕ Create a .env file in /backend with:
+➕ Create a \`.env\` file in \`/backend\` with:
 
+```env
 MONGODB_URI=mongodb+srv://technical-test:1234@cluster0.9walo.mongodb.net/users-db?retryWrites=true&w=majority&appName=Cluster0
 PORT=3000
 IMGUR_CLIENT_ID=842481ae63e434f
+```
 
 ### 3. Start the Backend
 
 ```bash
-npm run start:dev [Local]
+npm run start:dev  # Local development
 
-OR
+# OR
 
 npm run build
-npm run start:prod [Production]
+npm run start:prod  # Production
 ```
 
 ### 4. Frontend Setup (Next.js)
@@ -92,15 +94,15 @@ cd frontend
 npm install
 ```
 
-➕ Create a .env file in /frontend with:
+➕ Create a \`.env\` file in \`/frontend\` with:
 
+```env
 # Production
-
 NEXT_PUBLIC_API_BASE_URL=https://karim-employee-directory.onrender.com
 
 # OR Local (if backend is running locally)
-
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+```
 
 ### 5. Start the Frontend
 
@@ -108,29 +110,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 npm run dev
 ```
 
-## Features
-
-✅ View all employees
-
-🔍 Search by name or email
-
-🏢 Filter by department, title, or location
-
-➕ Add employee (with image upload)
-
-✏️ Edit employee
-
-❌ Delete employee
-
-📄 Pagination
-
-📱 Responsive UI design
-
-🌐 Live deployment with frontend on Vercel and backend on Render
-
-🌗 Light/Dark mode with animated toggle (Framer Motion)
-
-🎞️ Smooth page and layout transitions (Framer Motion)
+---
 
 ## 📁 Folder Structure
 
@@ -145,8 +125,10 @@ employee-directory/
 │ └── ...
 └── README.md
 
+---
+
 ## 👨‍💻 Author
 
-Karim Salam
-3D Frontend Developer | MERN Stack Engineer
+Karim Salam  
+3D Frontend Developer | MERN Stack Engineer  
 [GitHub](https://github.com/KarimSalam1)
