@@ -71,6 +71,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
     onDelete(id);
   };
 
+  // Create info sections for list view
   const renderListInfo = () => {
     return (
       <>

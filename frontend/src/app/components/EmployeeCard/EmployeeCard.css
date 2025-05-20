@@ -1,3 +1,5 @@
+/* Updated EmployeeCard.css for consistent list view alignment */
+
 .employee-card {
   width: 380px;
   height: 300px;
@@ -13,6 +15,7 @@
   transition: box-shadow 0.2s;
 }
 
+/* List view styling overrides */
 .list-view .employee-card {
   width: 90%;
   max-width: 800px;
@@ -50,7 +53,6 @@
   flex-direction: column;
   justify-content: center;
   gap: 10px;
-  margin-top: 15px;
 }
 
 .list-view .employee-details {
@@ -166,6 +168,7 @@
   color: #fff;
 }
 
+/* New class for the button container in list view */
 .list-view .card-buttons {
   display: flex;
   gap: 8px;
