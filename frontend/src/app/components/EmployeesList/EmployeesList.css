@@ -95,6 +95,7 @@
 .list-view {
   flex-direction: column;
   align-items: center;
+  margin-right: 10%;
 }
 
 .filter-select,
@@ -289,6 +290,7 @@
     margin: 0 auto;
   }
   .employees-container {
+    margin-top: 20px;
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 12px;

@@ -1,10 +1,12 @@
+/* Updated EmployeeCard.css for consistent list view alignment */
+
 .employee-card {
   width: 380px;
   height: 300px;
   border-radius: 8px;
   border: 1px solid var(--border, #e2e8f0);
   padding: 24px;
-  box-shadow: 0 2px 4px var(--card-shadow);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,27 +15,14 @@
   transition: box-shadow 0.2s;
 }
 
-/* List view card styles */
-.employee-card-list {
-  width: 100%;
-  max-width: 1200px;
-  border-radius: 8px;
-  border: 1px solid var(--border, #e2e8f0);
-  padding: 16px 24px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 4px var(--card-shadow);
-  background: var(--card-bg, #fff);
-  transition: box-shadow 0.2s;
-}
-
-.employee-card-list:hover {
-  box-shadow: 0 4px 8px var(--card-shadow-hover);
-}
-
-.employee-list-content {
-  display: flex;
+/* List view styling overrides */
+.list-view .employee-card {
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  padding: 16px 24px;
   gap: 24px;
 }
 
@@ -46,21 +35,17 @@
   position: relative;
 }
 
-/* List view avatar */
-.employee-avatar-list {
+.list-view .employee-avatar {
+  min-width: 60px;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #10b981;
-  flex-shrink: 0;
+  margin: 0;
 }
 
 .employee-name {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;
-  margin-top: 10px;
 }
 
 .employee-details {
@@ -68,12 +53,24 @@
   flex-direction: column;
   justify-content: center;
   gap: 10px;
-  margin-top: 10px;
+}
+
+.list-view .employee-details {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .employee-value {
   font-size: 22px;
   margin: 5px;
+}
+
+.list-view .employee-value {
+  font-size: 16px;
+  margin: 2px 0;
 }
 
 .employee-info {
@@ -82,46 +79,11 @@
   transition: all 0.3s ease;
 }
 
-/* List view info layout */
-.employee-info-list {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 16px;
-}
-
-.employee-info-section {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.employee-info-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.info-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.info-data {
-  display: flex;
-  flex-direction: column;
-}
-
-.info-label {
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.info-value {
-  font-weight: 600;
+.list-view .employee-info {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 180px;
+  text-align: left;
 }
 
 .employee-headline {
@@ -131,10 +93,18 @@
   color: #10b981;
 }
 
+.list-view .employee-headline {
+  margin-bottom: 4px;
+}
+
 .employee-icons {
   display: flex;
   justify-content: center;
   gap: 12px;
+}
+
+.list-view .employee-icons {
+  display: none;
 }
 
 .icon {
@@ -144,13 +114,6 @@
 
 .icon:hover {
   transform: scale(1.2);
-}
-
-/* List view action buttons */
-.employee-actions-list {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
 }
 
 .delete-button {
@@ -166,13 +129,17 @@
   align-items: center;
   gap: 6px;
   transition: background-color 0.2s ease, color 0.2s ease;
-  box-shadow: 0 2px 6px var(--button-shadow);
+}
+
+.list-view .delete-button {
+  margin-top: 0;
+  padding: 4px 10px;
+  font-size: 14px;
 }
 
 .delete-button:hover {
   background-color: #dc2626;
   color: white;
-  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
 }
 
 .edit-button {
@@ -188,45 +155,26 @@
   align-items: center;
   gap: 6px;
   transition: background-color 0.2s, color 0.2s;
-  box-shadow: 0 2px 6px var(--button-shadow);
 }
+
+.list-view .edit-button {
+  margin-top: 0;
+  padding: 4px 10px;
+  font-size: 14px;
+}
+
 .edit-button:hover {
   background-color: #249851;
-  color: white;
-  box-shadow: 0 4px 10px rgba(36, 152, 81, 0.3);
+  color: #fff;
 }
 
-/* Reset margin for list view buttons */
-.employee-actions-list .edit-button,
-.employee-actions-list .delete-button {
-  margin-top: 0;
-}
-
-@media (max-width: 768px) {
-  .employee-list-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .employee-avatar-list {
-    margin: 0 auto;
-  }
-
-  .employee-info-list {
-    width: 100%;
-  }
-
-  .employee-info-section {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .employee-actions-list {
-    width: 100%;
-    justify-content: center;
-    margin-top: 12px;
-  }
+/* New class for the button container in list view */
+.list-view .card-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 140px;
+  justify-content: flex-end;
 }
 
 @media (max-width: 600px) {
@@ -237,37 +185,53 @@
     padding: 10px;
     margin-bottom: 8px;
   }
+
+  .list-view .employee-card {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .list-view .employee-details {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .list-view .employee-info {
+    text-align: center;
+    min-width: 0;
+  }
+
+  .list-view .card-buttons {
+    margin: 8px auto 0;
+    width: 100%;
+    justify-content: center;
+  }
+
   .employee-avatar {
     width: 56px;
     height: 56px;
   }
+
   .employee-name {
     font-size: 1rem;
   }
+
   .employee-value {
     font-size: 1rem;
   }
+
   .employee-details {
     gap: 4px;
   }
-  .delete-button {
-    padding: 5px 8px;
-    font-size: 0.95rem;
-  }
+
+  .delete-button,
   .edit-button {
     padding: 5px 8px;
     font-size: 0.95rem;
   }
+
   .employee-icons {
     gap: 8px;
-  }
-
-  .employee-info-section {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .employee-info-item {
-    width: 100%;
   }
 }

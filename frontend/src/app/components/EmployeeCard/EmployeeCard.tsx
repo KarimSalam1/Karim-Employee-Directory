@@ -21,7 +21,7 @@ type EmployeeCardProps = {
   location: string;
   avatar?: string;
   onDelete: (id: string) => void;
-  viewMode: "grid" | "list"; // Add viewMode prop
+  viewMode?: "grid" | "list";
 };
 
 const EmployeeCard: React.FC<EmployeeCardProps> = ({
@@ -34,7 +34,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   location,
   avatar,
   onDelete,
-  viewMode, // Use viewMode prop
+  viewMode = "grid",
 }) => {
   const [headline, setHeadline] = useState("Name");
   const [value, setValue] = useState(`${firstName} ${lastName}`);
@@ -43,162 +43,114 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
     name: {
       label: "Name",
       value: `${firstName} ${lastName}`,
-      icon: <User color="#249851" />,
     },
     email: {
       label: "Email",
       value: email,
-      icon: <Mail color="#249851" />,
     },
     title: {
       label: "Title",
       value: title,
-      icon: <IdCard color="#249851" />,
     },
     department: {
       label: "Department",
       value: department,
-      icon: <Building color="#249851" />,
     },
     location: {
       label: "Location",
       value: location,
-      icon: <MapPin color="#249851" />,
     },
   };
 
   const handleHover = (key: keyof typeof infoMap) => {
-    if (viewMode === "grid") {
-      setHeadline(infoMap[key].label);
-      setValue(infoMap[key].value);
-    }
+    setHeadline(infoMap[key].label);
+    setValue(infoMap[key].value);
   };
 
   const handleDeleteClick = () => {
     onDelete(id);
   };
 
-  // Grid view (original card)
-  if (viewMode === "grid") {
+  // Create info sections for list view
+  const renderListInfo = () => {
     return (
-      <div className="employee-card">
-        <img
-          src={avatar || "/user.png"}
-          alt={`${firstName}'s avatar`}
-          className="employee-avatar"
-        />
-
-        <div className="employee-details">
-          <div className="employee-info">
-            <p className="employee-headline">{headline}</p>
-            <p className="employee-value">{value}</p>
-          </div>
-
-          <div className="employee-icons">
-            <div className="icon" onMouseEnter={() => handleHover("name")}>
-              <User color="#249851" />
-            </div>
-            <div className="icon" onMouseEnter={() => handleHover("email")}>
-              <Mail color="#249851" />
-            </div>
-            <div className="icon" onMouseEnter={() => handleHover("title")}>
-              <IdCard color="#249851" />
-            </div>
-            <div
-              className="icon"
-              onMouseEnter={() => handleHover("department")}
-            >
-              <Building color="#249851" />
-            </div>
-            <div className="icon" onMouseEnter={() => handleHover("location")}>
-              <MapPin color="#249851" />
-            </div>
-          </div>
-          <div
-            style={{ display: "flex", gap: "8px", justifyContent: "center" }}
-          >
-            <Link href={`/edit/${id}`}>
-              <button
-                className="edit-button"
-                type="button"
-                title="Edit Employee"
-              >
-                <Pencil size={16} /> Edit
-              </button>
-            </Link>
-            <button
-              className="delete-button"
-              onClick={handleDeleteClick}
-              title="Delete Employee"
-            >
-              <Trash2 size={16} /> Delete
-            </button>
-          </div>
+      <>
+        <div className="employee-info">
+          <p className="employee-headline">Name</p>
+          <p className="employee-value">{`${firstName} ${lastName}`}</p>
         </div>
-      </div>
+        <div className="employee-info">
+          <p className="employee-headline">Department</p>
+          <p className="employee-value">{department}</p>
+        </div>
+        <div className="employee-info">
+          <p className="employee-headline">Title</p>
+          <p className="employee-value">{title}</p>
+        </div>
+        <div className="employee-info">
+          <p className="employee-headline">Location</p>
+          <p className="employee-value">{location}</p>
+        </div>
+      </>
     );
-  }
+  };
 
-  // List view (horizontal layout)
   return (
-    <div className="employee-card-list">
-      <div className="employee-list-content">
-        <img
-          src={avatar || "/user.png"}
-          alt={`${firstName}'s avatar`}
-          className="employee-avatar-list"
-        />
+    <div className="employee-card">
+      <img
+        src={avatar || "/user.png"}
+        alt={`${firstName}'s avatar`}
+        className="employee-avatar"
+      />
 
-        <div className="employee-info-list">
-          <div className="employee-info-section">
-            <div className="employee-info-item">
-              <div className="info-icon">{infoMap.name.icon}</div>
-              <div className="info-data">
-                <span className="info-label">{infoMap.name.label}</span>
-                <span className="info-value">{infoMap.name.value}</span>
-              </div>
+      <div className="employee-details">
+        {viewMode === "grid" ? (
+          <>
+            <div className="employee-info">
+              <p className="employee-headline">{headline}</p>
+              <p className="employee-value">{value}</p>
             </div>
 
-            <div className="employee-info-item">
-              <div className="info-icon">{infoMap.email.icon}</div>
-              <div className="info-data">
-                <span className="info-label">{infoMap.email.label}</span>
-                <span className="info-value">{infoMap.email.value}</span>
+            <div className="employee-icons">
+              <div className="icon" onMouseEnter={() => handleHover("name")}>
+                <User color="#249851" />
+              </div>
+              <div className="icon" onMouseEnter={() => handleHover("email")}>
+                <Mail color="#249851" />
+              </div>
+              <div
+                className="icon"
+                onMouseEnter={() => handleHover("department")}
+              >
+                <Building color="#249851" />
+              </div>
+              <div className="icon" onMouseEnter={() => handleHover("title")}>
+                <IdCard color="#249851" />
+              </div>
+              <div
+                className="icon"
+                onMouseEnter={() => handleHover("location")}
+              >
+                <MapPin color="#249851" />
               </div>
             </div>
-          </div>
+          </>
+        ) : (
+          renderListInfo()
+        )}
 
-          <div className="employee-info-section">
-            <div className="employee-info-item">
-              <div className="info-icon">{infoMap.title.icon}</div>
-              <div className="info-data">
-                <span className="info-label">{infoMap.title.label}</span>
-                <span className="info-value">{infoMap.title.value}</span>
-              </div>
-            </div>
-
-            <div className="employee-info-item">
-              <div className="info-icon">{infoMap.department.icon}</div>
-              <div className="info-data">
-                <span className="info-label">{infoMap.department.label}</span>
-                <span className="info-value">{infoMap.department.value}</span>
-              </div>
-            </div>
-
-            <div className="employee-info-item">
-              <div className="info-icon">{infoMap.location.icon}</div>
-              <div className="info-data">
-                <span className="info-label">{infoMap.location.label}</span>
-                <span className="info-value">{infoMap.location.value}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="employee-actions-list">
+        <div
+          className={viewMode === "list" ? "card-buttons" : ""}
+          style={
+            viewMode === "grid"
+              ? { display: "flex", gap: "8px", justifyContent: "center" }
+              : {}
+          }
+        >
           <Link href={`/edit/${id}`}>
             <button className="edit-button" type="button" title="Edit Employee">
-              <Pencil size={16} /> Edit
+              <Pencil size={viewMode === "list" ? 16 : 20} color="#249851" />{" "}
+              Edit
             </button>
           </Link>
           <button
@@ -206,7 +158,8 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
             onClick={handleDeleteClick}
             title="Delete Employee"
           >
-            <Trash2 size={16} /> Delete
+            <Trash2 size={viewMode === "list" ? 16 : 20} color="#dc2626" />{" "}
+            Delete
           </button>
         </div>
       </div>

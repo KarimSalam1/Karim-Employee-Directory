@@ -1,9 +1,8 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import "./EmployeesList.css";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Employee {
   _id: string;
@@ -49,6 +48,7 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
     title: [],
     location: [],
   });
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const API_BASE =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
@@ -84,6 +84,7 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
         const result: ApiResponse = await res.json();
         setEmployees(result.data);
         setTotal(result.total);
+        setIsAnimating(false);
 
         if (!loadedPages.includes(page)) {
           setLoadedPages((prev) => [...prev, page]);
@@ -117,6 +118,26 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
       fetchFilterOptions();
     } catch (error) {
       alert("Error deleting employee: " + (error as Error).message);
+    }
+  };
+
+  const nextFunction = () => {
+    if (page < totalPages) {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      setIsAnimating(true);
+      setTimeout(() => {
+        setPage((p) => p + 1);
+      }, 300);
+    }
+  };
+
+  const previousFunction = () => {
+    if (page > 1) {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      setIsAnimating(true);
+      setTimeout(() => {
+        setPage((p) => p - 1);
+      }, 300);
     }
   };
 
@@ -196,14 +217,12 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
             <button
               className={`toggle-btn ${viewMode === "grid" ? "active" : ""}`}
               onClick={() => setViewMode("grid")}
-              title="Grid View"
             >
               <img className="grid-icon" src="/grid.svg" alt="Grid View" />
             </button>
             <button
               className={`toggle-btn ${viewMode === "list" ? "active" : ""}`}
               onClick={() => setViewMode("list")}
-              title="List View"
             >
               <img className="list-icon" src="/list.svg" alt="List View" />
             </button>
@@ -216,42 +235,51 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
         </div>
       </div>
 
-      <div
-        className={`employees-container ${
-          viewMode === "list" ? "list-view" : "grid-view"
-        }`}
-      >
-        {employees.map((emp) => (
-          <EmployeeCard
-            key={emp._id}
-            id={emp._id}
-            firstName={emp.firstName}
-            lastName={emp.lastName}
-            email={emp.email}
-            title={emp.title}
-            department={emp.department}
-            location={emp.location}
-            avatar={emp.avatar}
-            onDelete={handleDeleteEmployee}
-            viewMode={viewMode} // Pass viewMode to EmployeeCard
-          />
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        {!isAnimating && (
+          <motion.div
+            key={`${page}-${viewMode}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className={`employees-container ${
+              viewMode === "list" ? "list-view" : "grid-view"
+            }`}
+          >
+            {employees.map((emp) => (
+              <EmployeeCard
+                key={emp._id}
+                id={emp._id}
+                firstName={emp.firstName}
+                lastName={emp.lastName}
+                email={emp.email}
+                title={emp.title}
+                department={emp.department}
+                location={emp.location}
+                avatar={emp.avatar}
+                onDelete={handleDeleteEmployee}
+                viewMode={viewMode}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="pagination">
         <button
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          onClick={() => previousFunction()}
           disabled={page === 1}
           className="btn-previous"
         >
           Previous
         </button>
         <span>
-          Page {page} of {totalPages || 1}
+          Page {page} of {totalPages}
         </span>
         <button
-          onClick={() => setPage((p) => Math.min(p + 1, totalPages || 1))}
-          disabled={page === totalPages || totalPages === 0}
+          onClick={() => nextFunction()}
+          disabled={page === totalPages}
           className="btn-next"
         >
           Next
