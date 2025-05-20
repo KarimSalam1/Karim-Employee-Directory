@@ -114,99 +114,107 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
       setFilterType("department");
       setSearchTerm("");
       setPage(1);
+
       fetchFilterOptions();
     } catch (error) {
       alert("Error deleting employee: " + (error as Error).message);
     }
   };
 
+  const nextFunction = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    setPage((p) => Math.min(p + 1, totalPages));
+  };
+
+  const previousFunction = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    setPage((p) => Math.max(p - 1, 1));
+  };
+
   return (
     <div className="employee-directory">
-      <div className="directory-header">
-        <div className="directory-controls">
-          <h1 className="directory-title">Employees</h1>
-          <div className="directory-actions">
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Search by name or email"
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setPage(1);
-                }}
-                className="search-bar"
-              />
-            </div>
-
-            <div className="filter-container">
-              <span className="filter-label">Filter by:</span>
-
-              <select
-                value={filterType}
-                onChange={(e) => {
-                  setFilterType(
-                    e.target.value as "department" | "title" | "location"
-                  );
-                  setFilterValue("All");
-                  setPage(1);
-                }}
-                className="filter-select"
-              >
-                <option value="department">Department</option>
-                <option value="title">Title</option>
-                <option value="location">Location</option>
-              </select>
-
-              <select
-                value={filterValue}
-                onChange={(e) => {
-                  setFilterValue(e.target.value);
-                  setPage(1);
-                }}
-                className="filter-value-select"
-              >
-                <option value="All">All</option>
-                {filterOptions[filterType].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                className="reset-filters-btn"
-                onClick={() => {
-                  setFilterType("department");
-                  setFilterValue("All");
-                  setSearchTerm("");
-                  setPage(1);
-                }}
-              >
-                Reset
-              </button>
-            </div>
-
-            <div className="view-toggle">
-              <button
-                className={`toggle-btn ${viewMode === "grid" ? "active" : ""}`}
-                onClick={() => setViewMode("grid")}
-              >
-                <img className="grid-icon" src="/grid.svg" alt="Grid View" />
-              </button>
-              <button
-                className={`toggle-btn ${viewMode === "list" ? "active" : ""}`}
-                onClick={() => setViewMode("list")}
-              >
-                <img className="list-icon" src="/list.svg" alt="List View" />
-              </button>
-            </div>
-
-            <Link href="/add" className="add-employee-btn">
-              <span className="plus-icon">+</span>
-              Add Employee
-            </Link>
+      <div className="directory-controls">
+        <div className="directory-actions">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search by name or email"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPage(1);
+              }}
+              className="search-bar"
+            />
           </div>
+
+          <div className="filter-container">
+            <span className="filter-label">Filter by:</span>
+
+            <select
+              value={filterType}
+              onChange={(e) => {
+                setFilterType(
+                  e.target.value as "department" | "title" | "location"
+                );
+                setFilterValue("All");
+                setPage(1);
+              }}
+              className="filter-select"
+            >
+              <option value="department">Department</option>
+              <option value="title">Title</option>
+              <option value="location">Location</option>
+            </select>
+
+            <select
+              value={filterValue}
+              onChange={(e) => {
+                setFilterValue(e.target.value);
+                setPage(1);
+              }}
+              className="filter-value-select"
+            >
+              <option value="All">All</option>
+              {filterOptions[filterType].map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="reset-filters-btn"
+              onClick={() => {
+                setFilterType("department");
+                setFilterValue("All");
+                setSearchTerm("");
+                setPage(1);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+
+          {/* <div className="view-toggle">
+            <button
+              className={`toggle-btn ${viewMode === "grid" ? "active" : ""}`}
+              onClick={() => setViewMode("grid")}
+            >
+              <img className="grid-icon" src="/grid.svg" alt="Grid View" />
+            </button>
+            <button
+              className={`toggle-btn ${viewMode === "list" ? "active" : ""}`}
+              onClick={() => setViewMode("list")}
+            >
+              <img className="list-icon" src="/list.svg" alt="List View" />
+            </button>
+          </div> */}
+
+          <Link href="/add" className="add-employee-btn">
+            <span className="plus-icon">+</span>
+            Add Employee
+          </Link>
         </div>
       </div>
 
@@ -233,7 +241,7 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
 
       <div className="pagination">
         <button
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          onClick={() => previousFunction()}
           disabled={page === 1}
           className="btn-previous"
         >
@@ -243,7 +251,7 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
           Page {page} of {totalPages}
         </span>
         <button
-          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          onClick={() => nextFunction()}
           disabled={page === totalPages}
           className="btn-next"
         >

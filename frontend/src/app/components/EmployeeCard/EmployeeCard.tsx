@@ -70,7 +70,13 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   };
 
   return (
-    <div className="employee-card">
+    <div
+      className="employee-card"
+      onMouseLeave={() => {
+        setHeadline("Name");
+        setValue(`${firstName} ${lastName}`);
+      }}
+    >
       <img
         src={avatar || "/user.png"}
         alt={`${firstName}'s avatar`}
@@ -103,7 +109,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
           <Link href={`/edit/${id}`}>
             <button className="edit-button" type="button" title="Edit Employee">
-              <Pencil size={20} color="#249851" /> Edit
+              <Pencil size={20} color="currentColor" /> Edit
             </button>
           </Link>
           <button
@@ -111,7 +117,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
             onClick={handleDeleteClick}
             title="Delete Employee"
           >
-            <Trash2 size={20} color="#dc2626" /> Delete
+            <Trash2 size={20} color="currentColor" /> Delete
           </button>
         </div>
       </div>
