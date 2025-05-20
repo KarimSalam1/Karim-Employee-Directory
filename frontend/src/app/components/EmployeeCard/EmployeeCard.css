@@ -13,6 +13,30 @@
   transition: box-shadow 0.2s;
 }
 
+/* List view card styles */
+.employee-card-list {
+  width: 100%;
+  max-width: 1200px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e2e8f0);
+  padding: 16px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px var(--card-shadow);
+  background: var(--card-bg, #fff);
+  transition: box-shadow 0.2s;
+}
+
+.employee-card-list:hover {
+  box-shadow: 0 4px 8px var(--card-shadow-hover);
+}
+
+.employee-list-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
 .employee-avatar {
   width: 80px;
   height: 80px;
@@ -22,10 +46,21 @@
   position: relative;
 }
 
+/* List view avatar */
+.employee-avatar-list {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #10b981;
+  flex-shrink: 0;
+}
+
 .employee-name {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;
+  margin-top: 10px;
 }
 
 .employee-details {
@@ -45,6 +80,48 @@
   margin-bottom: 10px;
   text-align: center;
   transition: all 0.3s ease;
+}
+
+/* List view info layout */
+.employee-info-list {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 16px;
+}
+
+.employee-info-section {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.employee-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.info-value {
+  font-weight: 600;
 }
 
 .employee-headline {
@@ -67,6 +144,13 @@
 
 .icon:hover {
   transform: scale(1.2);
+}
+
+/* List view action buttons */
+.employee-actions-list {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .delete-button {
@@ -112,6 +196,39 @@
   box-shadow: 0 4px 10px rgba(36, 152, 81, 0.3);
 }
 
+/* Reset margin for list view buttons */
+.employee-actions-list .edit-button,
+.employee-actions-list .delete-button {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .employee-list-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .employee-avatar-list {
+    margin: 0 auto;
+  }
+
+  .employee-info-list {
+    width: 100%;
+  }
+
+  .employee-info-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .employee-actions-list {
+    width: 100%;
+    justify-content: center;
+    margin-top: 12px;
+  }
+}
+
 @media (max-width: 600px) {
   .employee-card {
     width: 100%;
@@ -143,5 +260,14 @@
   }
   .employee-icons {
     gap: 8px;
+  }
+
+  .employee-info-section {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .employee-info-item {
+    width: 100%;
   }
 }

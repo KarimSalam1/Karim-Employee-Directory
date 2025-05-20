@@ -4,11 +4,6 @@
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.directory-title {
-  font-size: 24px;
-  font-weight: 600;
-}
-
 .directory-controls {
   display: flex;
   justify-content: space-between;

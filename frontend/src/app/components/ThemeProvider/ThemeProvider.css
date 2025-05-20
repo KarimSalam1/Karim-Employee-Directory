@@ -5,6 +5,7 @@
   --card-bg: #ffffff;
   --border: #e2e8f0;
   --card-shadow: rgba(0, 0, 0, 0.05);
+  --card-shadow-hover: rgba(0, 0, 0, 0.1)
   --button-shadow: rgba(0, 0, 0, 0.08);
 }
 
@@ -15,6 +16,7 @@ body.dark {
   --card-bg: #374151;
   --border: #10b981;
   --card-shadow: rgba(255, 255, 255, 0.1);
+  --card-shadow-hover: rgba(255, 255, 255, 0.2);
   --button-shadow: rgba(255, 255, 255, 0.1);
 }
 

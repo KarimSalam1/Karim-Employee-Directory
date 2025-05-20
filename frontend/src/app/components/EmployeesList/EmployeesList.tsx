@@ -114,21 +114,10 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
       setFilterType("department");
       setSearchTerm("");
       setPage(1);
-
       fetchFilterOptions();
     } catch (error) {
       alert("Error deleting employee: " + (error as Error).message);
     }
-  };
-
-  const nextFunction = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    setPage((p) => Math.min(p + 1, totalPages));
-  };
-
-  const previousFunction = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    setPage((p) => Math.max(p - 1, 1));
   };
 
   return (
@@ -175,7 +164,14 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
               }}
               className="filter-value-select"
             >
-              <option value="All">All</option>
+              <option value="All">
+                All{" "}
+                {filterType === "department"
+                  ? "Departments"
+                  : filterType === "title"
+                  ? "Titles"
+                  : "Locations"}
+              </option>
               {filterOptions[filterType].map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -196,20 +192,22 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
             </button>
           </div>
 
-          {/* <div className="view-toggle">
+          <div className="view-toggle">
             <button
               className={`toggle-btn ${viewMode === "grid" ? "active" : ""}`}
               onClick={() => setViewMode("grid")}
+              title="Grid View"
             >
               <img className="grid-icon" src="/grid.svg" alt="Grid View" />
             </button>
             <button
               className={`toggle-btn ${viewMode === "list" ? "active" : ""}`}
               onClick={() => setViewMode("list")}
+              title="List View"
             >
               <img className="list-icon" src="/list.svg" alt="List View" />
             </button>
-          </div> */}
+          </div>
 
           <Link href="/add" className="add-employee-btn">
             <span className="plus-icon">+</span>
@@ -235,24 +233,25 @@ function EmployeeList({ setLoading }: EmployeeListProps) {
             location={emp.location}
             avatar={emp.avatar}
             onDelete={handleDeleteEmployee}
+            viewMode={viewMode} // Pass viewMode to EmployeeCard
           />
         ))}
       </div>
 
       <div className="pagination">
         <button
-          onClick={() => previousFunction()}
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
           disabled={page === 1}
           className="btn-previous"
         >
           Previous
         </button>
         <span>
-          Page {page} of {totalPages}
+          Page {page} of {totalPages || 1}
         </span>
         <button
-          onClick={() => nextFunction()}
-          disabled={page === totalPages}
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages || 1))}
+          disabled={page === totalPages || totalPages === 0}
           className="btn-next"
         >
           Next
