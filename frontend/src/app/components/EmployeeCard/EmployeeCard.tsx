@@ -95,7 +95,10 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   };
 
   return (
-    <div className="employee-card">
+    <div
+      className="employee-card"
+      onMouseLeave={() => setValue(`${firstName} ${lastName}`)}
+    >
       <img
         src={avatar || "/user.png"}
         alt={`${firstName}'s avatar`}
