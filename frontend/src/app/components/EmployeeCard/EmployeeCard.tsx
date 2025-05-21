@@ -94,11 +94,13 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
     );
   };
 
+  const resetHeadlineAndValue = () => {
+    setHeadline("Name");
+    setValue(`${firstName} ${lastName}`);
+  };
+
   return (
-    <div
-      className="employee-card"
-      onMouseLeave={() => setValue(`${firstName} ${lastName}`)}
-    >
+    <div className="employee-card" onMouseLeave={() => resetHeadlineAndValue()}>
       <img
         src={avatar || "/user.png"}
         alt={`${firstName}'s avatar`}
