@@ -12,6 +12,10 @@
   z-index: 9999;
 }
 
+body.dark .loading-overlay {
+  background-color: rgba(55, 65, 81, 0.85);
+}
+
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -29,6 +33,30 @@
   width: 80px;
   height: 80px;
   animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin: 0;
+  font-size: 20px;
+}
+
+.loading-note {
+  margin: 0;
+  max-width: 420px;
+  padding: 0 16px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text);
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 0.85;
+  }
 }
 
 @keyframes spin {
