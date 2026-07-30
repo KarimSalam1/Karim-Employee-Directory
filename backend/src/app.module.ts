@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import mongoose, { Connection } from 'mongoose';
 import { EmployeeModule } from './employee/employee.module';
+import { EmployeeController } from './employee/employee.controller';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { EnsureDbConnectionMiddleware } from './ensure-db-connection.middleware';
+import { MONGO_CONNECT_OPTIONS } from './mongo-options';
 
 // With lazyConnection, queries issued before the connection is up are
 // buffered; cap the buffer wait so requests fail fast with a clear error
@@ -21,9 +24,7 @@ mongoose.set('bufferTimeoutMS', 5000);
       // per-container pool small so parallel warm containers don't
       // exhaust the Atlas M0 connection cap.
       lazyConnection: true,
-      serverSelectionTimeoutMS: 5000,
-      maxPoolSize: 5,
-      minPoolSize: 0,
+      ...MONGO_CONNECT_OPTIONS,
       // With lazyConnection nothing awaits the initial connect, so a
       // failure would surface as an unhandled rejection / unhandled
       // 'error' event and crash the process. Swallow it here; requests
@@ -45,4 +46,10 @@ mongoose.set('bufferTimeoutMS', 5000);
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // DB routes wait for (or re-establish) the Mongo connection before
+    // their handlers run; / and /api/health stay DB-free.
+    consumer.apply(EnsureDbConnectionMiddleware).forRoutes(EmployeeController);
+  }
+}

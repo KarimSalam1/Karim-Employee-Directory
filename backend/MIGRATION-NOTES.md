@@ -48,10 +48,15 @@ Add each to **Production, Preview, and Development**:
    `lazyConnection: true` + `serverSelectionTimeoutMS: 5000` +
    `bufferTimeoutMS: 5000` + `maxPoolSize: 5`. The function boots (and
    `/api/health` answers) even when Atlas is unreachable, and DB routes fail
-   in ~5 s with a JSON 500 instead of hanging. **Caveat:** if a container's
-   very first connect fails, mongoose does not retry it for that container;
-   requests keep failing fast until a fresh cold start. Fine for telling
-   "deploy broken" from "Atlas broken", which was the goal.
+   quickly with a JSON error instead of hanging. Originally a container
+   whose very first connect failed stayed dead until the next cold start
+   (mongoose never retries a failed initial connect) — this bit us in
+   production. Now `EnsureDbConnectionMiddleware` runs before every
+   `/employees` handler and re-opens a dead connection on demand
+   (concurrent requests share one attempt), returning a JSON 503
+   `Database unavailable` only if the reconnect itself fails. Verified
+   locally: a warm process that failed its first connect recovers and
+   serves data as soon as Atlas is reachable again.
 3. **Crash on failed lazy connect (found during testing)** — with
    `lazyConnection` nothing awaits the initial connection, and a failure
    killed the whole process via unhandled rejection. Fixed by attaching
