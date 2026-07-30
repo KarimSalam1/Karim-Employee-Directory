@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import mongoose from 'mongoose';
+import mongoose, { Connection } from 'mongoose';
 import { EmployeeModule } from './employee/employee.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +24,21 @@ mongoose.set('bufferTimeoutMS', 5000);
       serverSelectionTimeoutMS: 5000,
       maxPoolSize: 5,
       minPoolSize: 0,
+      // With lazyConnection nothing awaits the initial connect, so a
+      // failure would surface as an unhandled rejection / unhandled
+      // 'error' event and crash the process. Swallow it here; requests
+      // still fail fast via the buffering timeout above. (connectionFactory,
+      // not onConnectionCreate: @nestjs/mongoose 11.0.3 skips the latter
+      // when lazyConnection is set.)
+      connectionFactory: (connection: Connection) => {
+        connection.on('error', (err: Error) => {
+          console.error('MongoDB connection error:', err.message);
+        });
+        connection.asPromise().catch((err: Error) => {
+          console.error('MongoDB initial connection failed:', err.message);
+        });
+        return connection;
+      },
     }),
     EmployeeModule,
   ],
