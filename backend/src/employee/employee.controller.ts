@@ -18,9 +18,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Employee } from './employee.schema';
 import { EmployeeCreateDto } from './employee-create.dto';
 import { EmployeeService } from './employee.service';
-import * as fs from 'fs';
 import axios from 'axios';
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer';
 
 @Controller('employees')
 export class EmployeeController {
@@ -57,19 +56,7 @@ export class EmployeeController {
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('avatar', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = file.originalname.split('.').pop();
-          cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('avatar', { storage: memoryStorage() }))
   async createEmployee(
     @UploadedFile() file: Express.Multer.File | undefined, // make file optional
     @Body() data: EmployeeCreateDto,
@@ -78,7 +65,7 @@ export class EmployeeController {
       let imgurUrl = '';
 
       if (file) {
-        const imageBase64 = fs.readFileSync(file.path, { encoding: 'base64' });
+        const imageBase64 = file.buffer.toString('base64');
 
         const response = await axios.post(
           'https://api.imgur.com/3/image',
@@ -91,10 +78,6 @@ export class EmployeeController {
         );
 
         imgurUrl = response.data.data.link;
-
-        fs.unlink(file.path, (err) => {
-          if (err) console.error('Failed to delete local file:', err);
-        });
       }
 
       const employee = await this.employeeService.create({
@@ -116,19 +99,7 @@ export class EmployeeController {
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    FileInterceptor('avatar', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = file.originalname.split('.').pop();
-          cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('avatar', { storage: memoryStorage() }))
   async update(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File | undefined,
@@ -136,7 +107,7 @@ export class EmployeeController {
   ): Promise<Employee | string> {
     let avatar = employeeCreateDto.avatar;
     if (file) {
-      const imageBase64 = fs.readFileSync(file.path, { encoding: 'base64' });
+      const imageBase64 = file.buffer.toString('base64');
 
       const response = await axios.post(
         'https://api.imgur.com/3/image',
@@ -149,10 +120,6 @@ export class EmployeeController {
       );
 
       avatar = response.data.data.link;
-
-      fs.unlink(file.path, (err) => {
-        if (err) console.error('Failed to delete local file:', err);
-      });
     } else if (employeeCreateDto.removeAvatar === 'true') {
       avatar = '';
     }
